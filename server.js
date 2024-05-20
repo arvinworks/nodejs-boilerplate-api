@@ -17,6 +17,8 @@ app.use(cors({ origin: (origin, callback) => callback(null, true), credentials: 
 app.use('/accounts', require('./accounts/accounts.controller'));
 app.use('/players', require('./players/player.controller'));
 app.use('/teams', require('./teams/team.controller'));
+app.use('/tournaments', require('./tournament/tournament.controller'));
+app.use('/schedules', require('./schedule/schedule.controller'));
 
 // swagger docs route
 app.use('/api-docs', require('_helpers/swagger'));
