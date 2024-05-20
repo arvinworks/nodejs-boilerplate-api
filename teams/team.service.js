@@ -1,12 +1,6 @@
-const config = require('config.json');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const crypto = require("crypto");
-const { Op } = require('sequelize');
 const db = require('_helpers/db');
-const Role = require('_helpers/role');
 
-module.exports = {  
+module.exports = {
     getAll,
     getById,
     create,
@@ -14,10 +8,11 @@ module.exports = {
     delete: _delete
 };
 
-
 async function getAll() {
-    const team = await db.Team.findAll();
-    return team.map(x => basicTeamDetails(x));
+    const teams = await db.Team.findAll({
+        include: [{ model: db.Player }]
+    });
+    return teams.map(x => basicTeamDetails(x));
 }
 
 async function getById(teamId) {
@@ -26,33 +21,22 @@ async function getById(teamId) {
 }
 
 async function create(params) {
-    // Validate
     const existingTeam = await db.Team.findOne({ where: { name: params.name } });
     if (existingTeam) {
-        throw 'Team "' + params.name + '" is already registered';
+        throw new Error('Team "' + params.name + '" is already registered');
     }
 
-    // Create and save new team
-    const team = await db.Team.create({
-        name: params.name,
-        location: params.location,
-        coach: params.coach,
-        region: params.region,
-        manager: params.manager
-    });
-
+    const team = await db.Team.create(params);
     return basicTeamDetails(team);
 }
 
 async function update(teamId, params) {
     const team = await getTeam(teamId);
 
-    // Validate (if name was changed)
     if (params.name && team.name !== params.name && await db.Team.findOne({ where: { name: params.name } })) {
-        throw 'Team name "' + params.name + '" is already taken';
+        throw new Error('Team name "' + params.name + '" is already taken');
     }
 
-    // Copy params to team and save
     Object.assign(team, params);
     team.updated = Date.now();
     await team.save();
@@ -60,22 +44,20 @@ async function update(teamId, params) {
     return basicTeamDetails(team);
 }
 
-
 async function _delete(teamId) {
     const team = await getTeam(teamId);
     await team.destroy();
 }
 
-// helper functions
-
 async function getTeam(teamId) {
-    const team = await db.Team.findByPk(teamId);
-    if (!team) throw 'Team not found';
+    const team = await db.Team.findByPk(teamId, {
+        include: [{ model: db.Player }]
+    });
+    if (!team) throw new Error('Team not found');
     return team;
 }
 
-
 function basicTeamDetails(team) {
-    const { teamId, name, location, coach, region, manager } = team;
-    return { teamId, name, location, coach, region, manager };
+    const { teamId, name, location, coach, region, manager, Players } = team;
+    return { teamId, name, location, coach, region, manager, players: Players };
 }

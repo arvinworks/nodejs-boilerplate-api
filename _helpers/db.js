@@ -22,6 +22,8 @@ async function initialize() {
     db.RefreshToken = require('../accounts/refresh-token.model')(sequelize);
 
     // define relationships
+    db.Team.hasMany(db.Player, { foreignKey: 'teamId' });
+    db.Player.belongsTo(db.Team, { foreignKey: 'teamId' });
     db.Account.hasMany(db.RefreshToken, { onDelete: 'CASCADE' });
     db.RefreshToken.belongsTo(db.Account);
     

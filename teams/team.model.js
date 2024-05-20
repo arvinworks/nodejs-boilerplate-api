@@ -1,9 +1,7 @@
 const { DataTypes } = require('sequelize');
 
-module.exports = model;
-
-function model(sequelize) {
-    const attributes = {
+module.exports = (sequelize) => {
+    const Team = sequelize.define('Team', {
         teamId: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -14,7 +12,11 @@ function model(sequelize) {
         coach: { type: DataTypes.STRING, allowNull: false },
         region: { type: DataTypes.STRING, allowNull: false },
         manager: { type: DataTypes.STRING, allowNull: false },
+    });
+
+    Team.associate = function(models) {
+        Team.hasMany(models.Player, { foreignKey: 'teamId' });
     };
 
-    return sequelize.define('team', attributes);
-}
+    return Team;
+};
