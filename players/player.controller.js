@@ -7,10 +7,10 @@ const playerService = require('./player.service');
 
 
 router.get('/', getAll);
-router.get('/:id', getById);
+router.get('/:playerId', getById);
 router.post('/players/', createSchema, create);
-router.put('/players/:id', updateSchema, update);
-router.delete('/players/:id', _delete);
+router.put('/players/:playerId', updateSchema, update);
+router.delete('/players/:playerId', _delete);
 
 module.exports = router;
 

@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const { Op } = require('sequelize');
 const db = require('_helpers/db');
 const Role = require('_helpers/role');
+const { param } = require('./player.controller');
 
 module.exports = {
     
@@ -27,14 +28,23 @@ async function getById(playerId) {
 }
 
 async function create(params) {
-    // validate
-    if (await db.Player.findOne({ where: { name: params.name } })) {
+    // Validate
+    const existingTeam = await db.Player.findOne({ where: { name: params.name } });
+    if (existingTeam) {
         throw 'Player "' + params.name + '" is already registered';
     }
-    // save account
-    await player.save();
 
-    return basicPlayerDetails(player);
+    // Create and save new team
+    const team = await db.Player.create({
+        name: params.name,
+        nationality: params.location,
+        born: params.born,
+        region: params.region,
+        role: params.role,
+        ingameName: params.ingameName
+    });
+
+    return basicTeamDetails(team);
 }
 
 async function update(playerId, params) {
