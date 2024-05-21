@@ -17,7 +17,7 @@ module.exports = {
 
 
 async function getAll() {
-    const player = await db.players.findAll();
+    const player = await db.Player.findAll();
     return player.map(x => basicPlayerDetails(x));
 }
 
@@ -28,7 +28,7 @@ async function getById(playerId) {
 
 async function create(params) {
     // validate
-    if (await db.player.findOne({ where: { name: params.name } })) {
+    if (await db.Player.findOne({ where: { name: params.name } })) {
         throw 'Player "' + params.name + '" is already registered';
     }
     // save account
@@ -41,7 +41,7 @@ async function update(playerId, params) {
     const player = await getPlayer(playerId);
 
     // validate (if email was changed)
-    if (params.name && player.name !== player.name && await db.player.findOne({ where: { name: params.name } })) {
+    if (params.name && player.name !== player.name && await db.Player.findOne({ where: { name: params.name } })) {
         throw 'name "' + params.name + '" is already taken';
     }
 
@@ -61,7 +61,7 @@ async function _delete(playerId) {
 // helper functions
 
 async function getPlayer(playerId) {
-    const player = await db.player.findByPk(playerId);
+    const player = await db.Player.findByPk(playerId);
     if (!player) throw 'Player not found';
     return player;
 }

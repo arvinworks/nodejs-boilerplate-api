@@ -6,8 +6,8 @@ const authorize = require('_middleware/authorize')
 const playerService = require('./player.service');
 
 
-router.get('/players/', getAll);
-router.get('/players/:id', getById);
+router.get('/', getAll);
+router.get('/:id', getById);
 router.post('/players/', createSchema, create);
 router.put('/players/:id', updateSchema, update);
 router.delete('/players/:id', _delete);

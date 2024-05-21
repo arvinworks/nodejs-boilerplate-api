@@ -4,6 +4,11 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
+        teamId: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         name: { type: DataTypes.STRING, allowNull: false },
         location: { type: DataTypes.STRING, allowNull: false },
         coach: { type: DataTypes.STRING, allowNull: false },

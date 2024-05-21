@@ -6,11 +6,11 @@ const authorize = require('_middleware/authorize')
 const teamService = require('./team.service');
 
 
-router.get('/teams/', getAll);
-router.get('/teams/:id', getById);
-router.post('/teams/', createSchema, create);
-router.put('/teams/:id', updateSchema, update);
-router.delete('/teams/:id', _delete);
+router.get('/', getAll);
+router.get('/:teamId', getById);
+router.post('/', createSchema, create);
+router.put('/:teamId', updateSchema, update);
+router.delete('/:teamId', _delete);
 
 module.exports = router;
 

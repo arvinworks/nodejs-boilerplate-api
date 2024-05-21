@@ -6,8 +6,7 @@ const { Op } = require('sequelize');
 const db = require('_helpers/db');
 const Role = require('_helpers/role');
 
-module.exports = {
-    
+module.exports = {  
     getAll,
     getById,
     create,
@@ -17,7 +16,7 @@ module.exports = {
 
 
 async function getAll() {
-    const team = await db.teams.findAll();
+    const team = await db.Team.findAll();
     return team.map(x => basicTeamDetails(x));
 }
 
@@ -27,31 +26,40 @@ async function getById(teamId) {
 }
 
 async function create(params) {
-    // validate
-    if (await db.team.findOne({ where: { name: params.name } })) {
+    // Validate
+    const existingTeam = await db.Team.findOne({ where: { name: params.name } });
+    if (existingTeam) {
         throw 'Team "' + params.name + '" is already registered';
     }
-    // save account
-    await team.save();
+
+    // Create and save new team
+    const team = await db.Team.create({
+        name: params.name,
+        location: params.location,
+        coach: params.coach,
+        region: params.region,
+        manager: params.manager
+    });
 
     return basicTeamDetails(team);
 }
 
 async function update(teamId, params) {
-    const team = await getAccount(teamId);
+    const team = await getTeam(teamId);
 
-    // validate (if email was changed)
-    if (params.name && team.name !== team.name && await db.team.findOne({ where: { name: params.name } })) {
-        throw 'name "' + params.name + '" is already taken';
+    // Validate (if name was changed)
+    if (params.name && team.name !== params.name && await db.Team.findOne({ where: { name: params.name } })) {
+        throw 'Team name "' + params.name + '" is already taken';
     }
 
-    // copy params to account and save
+    // Copy params to team and save
     Object.assign(team, params);
     team.updated = Date.now();
     await team.save();
 
     return basicTeamDetails(team);
 }
+
 
 async function _delete(teamId) {
     const team = await getTeam(teamId);
@@ -61,7 +69,7 @@ async function _delete(teamId) {
 // helper functions
 
 async function getTeam(teamId) {
-    const team = await db.team.findByPk(teamId);
+    const team = await db.Team.findByPk(teamId);
     if (!team) throw 'Team not found';
     return team;
 }
