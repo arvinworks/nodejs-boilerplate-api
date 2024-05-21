@@ -6,11 +6,11 @@ const authorize = require('_middleware/authorize')
 const teamService = require('./team.service');
 
 
-router.get('/', authorize(), getAll);
-router.get('/:id', authorize(), getById);
-router.post('/', authorize(), createSchema, create);
-router.put('/:id', authorize(), updateSchema, update);
-router.delete('/:id', authorize(), _delete);
+router.get('/teams/', getAll);
+router.get('/teams/:id', getById);
+router.post('/teams/', createSchema, create);
+router.put('/teams/:id', updateSchema, update);
+router.delete('/teams/:id', _delete);
 
 module.exports = router;
 
@@ -32,8 +32,8 @@ function createSchema(req, res, next) {
         name: Joi.string().required(),
         location: Joi.string().required(),
         coach: Joi.string().required(),
-        region: Joi.string().required().required(),
-        manager: Joi.string().required().required(),
+        region: Joi.string().required(),
+        manager: Joi.string().required(),
         
     });
     validateRequest(req, next, schema);

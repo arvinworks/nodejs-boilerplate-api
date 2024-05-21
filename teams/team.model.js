@@ -11,5 +11,5 @@ function model(sequelize) {
         manager: { type: DataTypes.STRING, allowNull: false },
     };
 
-    return sequelize.define('team', attributes, options);
+    return sequelize.define('team', attributes);
 }
