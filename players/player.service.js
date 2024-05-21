@@ -21,8 +21,8 @@ async function getAll() {
     return player.map(x => basicPlayerDetails(x));
 }
 
-async function getById(id) {
-    const player = await getTeam(id);
+async function getById(playerId) {
+    const player = await getTeam(playerId);
     return basicPlayerDetails(player);
 }
 
@@ -37,8 +37,8 @@ async function create(params) {
     return basicPlayerDetails(player);
 }
 
-async function update(id, params) {
-    const player = await getPlayer(id);
+async function update(playerId, params) {
+    const player = await getPlayer(playerId);
 
     // validate (if email was changed)
     if (params.name && player.name !== player.name && await db.player.findOne({ where: { name: params.name } })) {
@@ -53,21 +53,21 @@ async function update(id, params) {
     return basicPlayerDetails(player);
 }
 
-async function _delete(id) {
-    const player = await getPlayer(id);
+async function _delete(playerId) {
+    const player = await getPlayer(playerId);
     await player.destroy();
 }
 
 // helper functions
 
-async function getPlayer(id) {
-    const player = await db.player.findByPk(id);
+async function getPlayer(playerId) {
+    const player = await db.player.findByPk(playerId);
     if (!player) throw 'Player not found';
     return player;
 }
 
 
 function basicPlayerDetails(player) {
-    const { id, name, nationality, born, region, role, ingameName, teamId } = player;
-    return { id, name, nationality, born, region, role, ingameName, teamId };
+    const { playerId, name, nationality, born, region, role, ingameName, teamId } = player;
+    return { playerId, name, nationality, born, region, role, ingameName, teamId };
 }

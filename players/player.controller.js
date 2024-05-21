@@ -22,7 +22,7 @@ function getAll(req, res, next) {
 
 function getById(req, res, next) {
     
-    playerService.getById(req.params.id)
+    playerService.getById(req.params.playerId)
         .then(player => player ? res.json(player) : res.sendStatus(404))
         .catch(next);
 }
@@ -61,14 +61,14 @@ function updateSchema(req, res, next) {
 
 function update(req, res, next) {
     
-    playerService.update(req.params.id, req.body)
+    playerService.update(req.params.playerId, req.body)
         .then(player => res.json(player))
         .catch(next);
 }
 
 function _delete(req, res, next) {
     
-    playerService.delete(req.params.id)
+    playerService.delete(req.params.playerId)
         .then(() => res.json({ message: 'Player deleted successfully' }))
         .catch(next);
 }
