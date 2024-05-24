@@ -7,8 +7,12 @@ module.exports = (sequelize) => {
       autoIncrement: true,
       primaryKey: true
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING,
       allowNull: false
     },
     prize_pool: {
@@ -26,8 +30,16 @@ module.exports = (sequelize) => {
     runner_up: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    game: {
+      type: DataTypes.ENUM('Dota 2', 'Valorant', 'Mobile Legends'),
+      allowNull: false
     }
   });
+
+  Tournament.associate = (models) => {
+    Tournament.hasMany(models.Schedule, { foreignKey: 'tournamentId' });
+  };
 
   return Tournament;
 };

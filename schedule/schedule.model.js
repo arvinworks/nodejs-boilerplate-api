@@ -25,5 +25,9 @@ module.exports = (sequelize) => {
     }
   });
 
+  Schedule.associate = (models) => {
+    Schedule.belongsTo(models.Tournament, { foreignKey: 'tournamentId' });
+  };
+
   return Schedule;
 };
