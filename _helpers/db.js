@@ -28,10 +28,6 @@ async function initialize() {
     db.Account.hasMany(db.RefreshToken, { onDelete: 'CASCADE' });
     db.RefreshToken.belongsTo(db.Account);
 
-    // Define relationships for tournaments
-    // Assuming each tournament has multiple teams and matches (if applicable)
-    db.Tournament.belongsToMany(db.Team, { through: 'TournamentTeams', foreignKey: 'tournamentId' });
-    db.Team.belongsToMany(db.Tournament, { through: 'TournamentTeams', foreignKey: 'teamId' });
     // sync all models with database
     await sequelize.sync();
 }
