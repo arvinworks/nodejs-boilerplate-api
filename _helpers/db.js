@@ -20,7 +20,8 @@ async function initialize() {
     db.Player = require('../players/player.model')(sequelize);
     db.Team = require('../teams/team.model')(sequelize);
     db.RefreshToken = require('../accounts/refresh-token.model')(sequelize);
-    db.Tournament = require('../tournaments/tournament.model')(sequelize); // Add the Tournament model
+    db.Tournament = require('../tournaments/tournament.model')(sequelize);
+    db.Schedule = require('../schedule/schedule.model')(sequelize);
 
     // Define model relationships
     db.Team.hasMany(db.Player, { foreignKey: 'teamId' });
