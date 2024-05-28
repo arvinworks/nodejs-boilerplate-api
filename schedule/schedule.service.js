@@ -7,6 +7,7 @@ module.exports = {
   update,
   delete: _delete,
   getSchedulesByTournamentId,
+  getScheduleByTournamentId,
   createSchedule,
 };
 
@@ -73,4 +74,21 @@ async function getTournament(id) {
   const tournament = await db.Tournament.findByPk(id);
   if (!tournament) throw new Error('Tournament not found');
   return tournament;
+}
+
+async function getScheduleByTournamentId(tournamentId) {
+  const tournament = await db.Tournament.findByPk(tournamentId, {
+    include: [
+      {
+        model: db.Schedule,
+        as: 'Schedules' 
+      }
+    ]
+  });
+
+  if (!tournament) {
+    throw new Error('Tournament not found');
+  }
+
+  return tournament.Schedules;
 }

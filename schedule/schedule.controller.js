@@ -8,6 +8,15 @@ const scheduleService = require('./schedule.service');
 router.get('/', getAll);
 router.get('/:scheduleId', getById);
 router.get('/tournament/:tournamentId/schedules', getSchedulesByTournamentId);
+router.get('/tournaments/:tournamentId/schedules', getScheduleByTournamentId);
+router.get('/tournament/:tournamentName/schedules', getSchedulesByTournamentName);
+
+function getSchedulesByTournamentName(req, res, next) {
+  const tournamentName = req.params.tournamentName;
+  scheduleService.getSchedulesByTournamentName(tournamentName)
+    .then(schedules => res.json(schedules))
+    .catch(next);
+}
 router.post('/', createSchema, create);
 router.post('/tournament/:tournamentId/schedules', createSchema, create);
 router.put('/:scheduleId', updateSchema, update);
@@ -72,6 +81,22 @@ function _delete(req, res, next) {
 }
 
 function getSchedulesByTournamentId(req, res, next) {
+  const tournamentId = req.params.tournamentId;
+
+  scheduleService.getSchedulesByTournamentId(tournamentId)
+    .then(schedules => res.json(schedules))
+    .catch(next);
+}
+
+function getSchedulesByTournamentName(req, res, next) {
+  const tournamentName = req.params.tournamentName;
+  scheduleService.getSchedulesByTournamentName(tournamentName)
+    .then(schedules => res.json(schedules))
+    .catch(next);
+}
+
+
+function getScheduleByTournamentId(req, res, next) {
   const tournamentId = req.params.tournamentId;
 
   scheduleService.getSchedulesByTournamentId(tournamentId)
